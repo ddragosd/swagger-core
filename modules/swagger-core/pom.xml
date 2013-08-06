@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.wordnik</groupId>
   <artifactId>swagger-core_2.10.0</artifactId>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>swagger-core</name>
   <version>1.2.5</version>
   <build>
@@ -24,6 +24,23 @@
         <directory>src/test/resources</directory>
       </testResource>
     </testResources>
+    <plugins>
+      <plugin>
+         <groupId>org.apache.felix</groupId>
+         <artifactId>maven-bundle-plugin</artifactId>
+         <extensions>true</extensions>
+         <configuration>
+            <instructions>
+               <Private-Package>com.wordnik.swagger.jsonschema</Private-Package>
+                <Import-Package>!sun.reflect.generics.reflectiveObjects,*</Import-Package>
+                <Export-Package>
+                    com.wordnik.swagger.core*;version=${project.version}
+                </Export-Package>
+                <DynamicImport-Package>com.wordnik.swagger.*</DynamicImport-Package>
+             </instructions>
+         </configuration>
+      </plugin>
+    </plugins>
   </build>
   <dependencies>
     <dependency>

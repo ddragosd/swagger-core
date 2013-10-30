@@ -27,7 +27,17 @@ object SwaggerContext {
   private val classLoaders = ListBuffer.empty[ClassLoader]
   registerClassLoader(this.getClass.getClassLoader)
 
-  def registerClassLoader(cl: ClassLoader) = this.classLoaders += cl
+  def registerClassLoader(cl: ClassLoader) = {
+    if (this.classLoaders.indexOf(cl) < 0) {
+      this.classLoaders += cl
+    }
+  }
+
+  def unregisterClassLoader(cl: ClassLoader) = {
+    if (this.classLoaders.indexOf(cl) >= 0) {
+      this.classLoaders -= cl
+    }
+  }
 
   def loadClass(name: String) = {
     var clazz: Class[_] = null
@@ -37,7 +47,7 @@ object SwaggerContext {
         try {
           clazz = Class.forName(name, true, classLoader)
         } catch {
-          case e: ClassNotFoundException => LOGGER.debug("Class not found in classLoader " + classLoader)
+          case e: ClassNotFoundException => LOGGER.debug("Class [" + name + "] not found in classLoader " + classLoader)
         }
       }
     }
